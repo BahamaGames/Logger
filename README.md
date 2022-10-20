@@ -11,7 +11,7 @@ Within the configStruct you can set the logger Tag, and additional level setting
 5. ERROR  : {maxdepth: 4, cache: true}
 6. FATAL  : {maxdepth: 4, cache: true}
 
-### Basic Useage
+### Basic Usage
 1. Create an instance of it.
 ```
 var log = new bgLogger();
@@ -20,7 +20,7 @@ var log = new bgLogger();
 ```
 log.bgTrace("hello world");
 ```
-### Other useage
+### Other usage
 1. Can also provide additional inputs within a single call.
 ```
 var name = "RandomUser";
