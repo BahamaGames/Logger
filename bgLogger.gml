@@ -58,8 +58,8 @@ function bgLogger(__bg_config = {
 	simply make a copy, and use that.
 	*/
 		
-	bg_config					= __bg_config;
-	bg_tag						= bg_config[$ "TAG"];
+	_bg_config					= __bg_config;
+	bg_tag						= _bg_config[$ "TAG"];
 	bg_logs						= ds_list_create();
 	bg_json_beautify_fb			= buffer_create(1024, buffer_fast, 1);
 	bg_json_beautify_rb			= buffer_create(1024, buffer_grow, 1);
@@ -74,7 +74,7 @@ function bgLogger(__bg_config = {
 		if(!bg_enabled) return self;
 		var 
 		__bg_timestamp		= "["+date_time_string(date_current_datetime())+"]",
-		__bg_level_struct	= bg_config[$ __bg_level];
+		__bg_level_struct	= _bg_config[$ __bg_level];
 		
 		if(__bg_level_struct == undefined){
 			__bg_message= "Log level "+__bg_level+" doesnt exists!!!";
@@ -310,6 +310,13 @@ function bgLogger(__bg_config = {
 		return __bg_res;
 	}
 	
+	/// @function				bgGetLogs()
+	/// @description			Returns the internal ds_list of logs. READONLY!!!
+	static bgGetLogs			= function()
+	{
+		return bg_logs;
+	}
+	
 	/// @funtion				bgLoggerCleanup()
 	/// @description			Cleans up the logger deleting its buffer's and data structures.
 	static bgLoggerCleanup		= function()
@@ -317,7 +324,7 @@ function bgLogger(__bg_config = {
 		buffer_delete(bg_json_beautify_fb);
 		buffer_delete(bg_json_beautify_rb);
 		ds_list_destroy(bg_logs);
-		delete bg_config;
+		delete _bg_config;
 		return true;
 		//show_debug_message("["+string(date_get_month(date_current_datetime()))+"/"+string(date_get_day(date_current_datetime()))+" "+string(date_get_hour(date_current_datetime()))+":"+string(date_get_minute(date_current_datetime()))+":"+string(date_get_second(date_current_datetime()))+"] ["+bg_tag+"] [TRACE] logger cleaned up");
 	}
