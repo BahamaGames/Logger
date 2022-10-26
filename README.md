@@ -45,9 +45,3 @@ When done make to sure clean up to prevent memory leak.
 log.bgLoggerCleanup();
 delete log;
 ```
-
-# Ending
-Feel free to addon as long as it meets these requirements. Much would be appreciated
-1. Syntax: to prevent conflicts between other projects all non singluar variables must use the prefix bg. Functions should be camelCased, accessible variables should use ```bg_```, none accessible variables ```_bg_``` and local variables ```__bg_```.
-
-2. Maintain the basic principles SOLID A google search: https://www.baeldung.com/solid-principles
