@@ -38,7 +38,7 @@ function Logger()						constructor
 	/// @return {Struct}
 	static log							= function(____message, ____options = undefined)
 	{
-		____options						= bg_validate_options(global.__opts, ____options, "options", function(){}, true);
+		____options						= bg_validate_options(global.__logger_opts, ____options, "options", function(){}, true);
 		
 		var ___flags					= ____options.flags;
 		
@@ -184,7 +184,7 @@ function Logger()						constructor
 	_draw_text_spacing					= 2;
 	_assert_point						= 0;
 	
-	if(!variable_global_exists("__opts"))
+	if(!variable_global_exists("__logger_opts"))
 	{
 		global.__logger_opts			= 
 		{
