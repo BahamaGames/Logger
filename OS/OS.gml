@@ -74,13 +74,13 @@ GitHub	: https://github.com/BahamaGames
 function datetime_string(____timestamp = date_current_datetime())
 {
 	return	string_replace_all(
-			string_format(date_get_year(____timestamp), 4, 0)	+ "-" +
-			string_format(date_get_month(____timestamp), 2, 0)	+ "-" +
-			string_format(date_get_day(____timestamp), 2, 0)		+ "T" +
-			string_format(date_get_hour(____timestamp), 2, 0)	+ ":" +
-			string_format(date_get_minute(____timestamp), 2, 0)	+ ":" +
-			string_format(date_get_second(____timestamp), 2, 0)
+			string_format(date_get_year(	____timestamp), 4, 0)	+ "-" +
+			string_format(date_get_month(	____timestamp), 2, 0)	+ "-" +
+			string_format(date_get_day(		____timestamp), 2, 0)	+ "T" +
+			string_format(date_get_hour(	____timestamp), 2, 0)	+ ":" +
+			string_format(date_get_minute(	____timestamp), 2, 0)	+ ":" +
+			string_format(date_get_second(	____timestamp), 2, 0)
 			, " ", "0");
 }
 	
-function unix_timestamp(){return floor((date_current_datetime() - 25569) * 86400);}
+function unix_timestamp(____time = date_current_datetime()){return floor((____time - 25569) * 86400);}

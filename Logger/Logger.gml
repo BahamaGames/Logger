@@ -7,8 +7,6 @@ GitHub	: https://github.com/BahamaGames
 
 // feather ignore all
 
-#macro LOGGER_DEFAULT_CATEGORY "GENERIC"
-
 enum LOGGER_FLAGS
 {
 	MASK	= 0x111,
@@ -26,6 +24,8 @@ enum LOGGER_LEVELS
 	DEBUG
 }
 
+#macro LOGGER_DEFAULT_CATEGORY			"GENERIC"
+
 function Logger()						constructor
 {
 	static version						= "1.0.0";
@@ -38,7 +38,7 @@ function Logger()						constructor
 	/// @return {Struct}
 	static log							= function(____message, ____options = undefined)
 	{
-		____options						= bg_validate_options(global.__logger_opts, ____options, "options", function(){}, true);
+		____options						= bg_validate_options(global.__opts, ____options, "options", function(){}, true);
 		
 		var ___flags					= ____options.flags;
 		
@@ -65,7 +65,7 @@ function Logger()						constructor
 	{
 		var ___crumb = 
 		{
-			level		: is_real(____level)? global.__logger_level_array[____level]: ____level,
+			level		: is_real(____level)? global.__level_array[____level]: ____level,
 			message		: ____message,
 			category	: ____category,
 			timestamp	: unix_timestamp()
@@ -73,13 +73,13 @@ function Logger()						constructor
 	
 		if(____data != undefined) ___crumb.data = ____data;
 	
-		ds_list_add(_logger_bread_crumbs, ___crumb);
+		ds_list_add(breadCrumbs, ___crumb);
 	
 		// trim breadcrumbs
-		if(ds_list_size(_logger_bread_crumbs) > maxBreadCrumbs) 
+		if(ds_list_size(breadCrumbs) > maxBreadCrumbs) 
 		{
-			delete _logger_bread_crumbs[| 0];
-			ds_list_delete(_logger_bread_crumbs, 0);
+			delete breadCrumbs[| 0];
+			ds_list_delete(breadCrumbs, 0);
 		}
 		
 		return self;
@@ -98,16 +98,7 @@ function Logger()						constructor
 		
 		return self;	
 	}
-	
-	/// @context Logger					
-	/// @function						breadCrumbs()
-	/// @description					Returns the breadcrumbs list.
-	/// @return {Id.DSList}
-	static breadCrumbs					= function()
-	{
-		return _logger_bread_crumbs;	
-	}
-	
+		
 	/// @context							self
 	/// @function							assert(value, message, options)
 	/// @description						If the value is false, logs a message as provided level.
@@ -142,39 +133,39 @@ function Logger()						constructor
 		if(!is_array(t)) t = [t];
 		
 		var 
-		xx= argument_count > 1? argument[1]: _logger_draw_text_x,
-		yy= argument_count > 2? argument[2]: _logger_draw_text_y,
+		xx= argument_count > 1? argument[1]: _draw_text_x,
+		yy= argument_count > 2? argument[2]: _draw_text_y,
 		r = string(t[0]),
 		s = argument_count > 3? argument[3]: 0,
-		p = argument_count > 4? argument[4]: string_height("A") + _logger_draw_text_padding;
+		p = argument_count > 4? argument[4]: string_height("A") + _draw_text_padding;
 			
-		if(xx == undefined) xx = _logger_draw_text_x;
-		if(yy == undefined) yy = _logger_draw_text_y;
+		if(xx == undefined) xx = _draw_text_x;
+		if(yy == undefined) yy = _draw_text_y;
 			
 		for(var i = 1; i < array_length(t); ++i) 
 			r += $"{t[i]}";
 		
 		draw_text(xx, yy, r);
 		
-		_logger_draw_text_x = xx;
-		_logger_draw_text_y = yy;
-		_logger_draw_text_x += s ?? string_width(t);
-		_logger_draw_text_y += p;
+		_draw_text_x = xx;
+		_draw_text_y = yy;
+		_draw_text_x += s ?? string_width(t);
+		_draw_text_y += p;
 		
 		return self;
 	}
 										
-	static assertPoint					= function(____point = _logger_assert_point)
+	static assertPoint					= function(____point = _assert_point)
 	{
 		show_debug_message($"Assert point: {____point}");
-		_logger_assert_point		= ____point + 1;
+		_assert_point		= ____point + 1;
 		return self;
 	};
 	
 	/// @function						destroy()
 	static destroy						= function()
 	{
-		ds_list_destroy(_logger_bread_crumbs);
+		ds_list_destroy(breadCrumbs);
 		var s = self;
 		delete s;
 	}
@@ -182,18 +173,18 @@ function Logger()						constructor
 	/// @function						cleanup()
 	static cleanup						= function()
 	{
-		delete global.__logger_opts;
+		delete global.__looger_opts;
 	}
 	
 	maxBreadCrumbs						= 100;
-	_logger_bread_crumbs				= ds_list_create();
-	_logger_draw_text_x					= 0;
-	_logger_draw_text_y					= 0;
-	_logger_draw_text_padding			= 2;
-	_logger_draw_text_spacing			= 2;
-	_logger_assert_point				= 0;
+	breadCrumbs							= ds_list_create();
+	_draw_text_x						= 0;
+	_draw_text_y						= 0;
+	_draw_text_padding					= 2;
+	_draw_text_spacing					= 2;
+	_assert_point						= 0;
 	
-	if(!variable_global_exists("__logger_opts"))
+	if(!variable_global_exists("__opts"))
 	{
 		global.__logger_opts			= 
 		{
